@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function login(email: string, password: string): Promise<boolean> {
     try {
-      const res = await fetch("/api/usuarios/login", {
+      const res = await fetch("https://blogpersonal-etde.onrender.com/api/usuarios/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -47,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function register(name: string, email: string, password: string): Promise<boolean> {
     try {
-      const res = await fetch("/api/usuarios", {
+      const res = await fetch("https://blogpersonal-etde.onrender.com/api/usuarios", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),

@@ -15,7 +15,7 @@ const Articulos = () => {
   }, []);
   async function consumirApi() {
     setLoading(true);
-    const url = "api/articulos/";
+    const url = "https://blogpersonal-etde.onrender.com/api/articulos/";
     const peticion = await fetch(url, { method: "GET" });
     const datos = await peticion.json();
     if (datos.status === "success") {

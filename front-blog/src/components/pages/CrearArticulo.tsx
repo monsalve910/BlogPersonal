@@ -35,7 +35,7 @@ const CrearArticulo = () => {
     };
 
     try {
-      const res = await fetch("/api/articulos", {
+      const res = await fetch("https://blogpersonal-etde.onrender.com/api/articulos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
