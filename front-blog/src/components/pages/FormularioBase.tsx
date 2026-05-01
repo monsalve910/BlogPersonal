@@ -2,7 +2,7 @@ import { useState } from "react";
 
 
 const FormularioBase = () => {
-    const [Formulario, setFormulario] = useState({
+    const [formulario, setFormulario] = useState({
     })
 const obtenerDatos = ()=>{}
 
