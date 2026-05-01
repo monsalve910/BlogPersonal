@@ -1,3 +1,4 @@
+import {db} from '../config/database.js';
 module.exports = (sequelize, DataTypes) => {
   const Article = sequelize.define('Article', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },

@@ -1,23 +1,23 @@
-require('dotenv').config();
-const { Sequelize } = require('sequelize');
-dotenv.config();
-
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: 'mysql',
-    logging: false,
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false
-      }
-    }
-  }
-);
-
-module.exports = { sequelize };
+//!modulo para conexion a la base de datos
+import mysql from "mysql2/promise";
+import dotenv from 'dotenv';//importa la libreria dotenv
+dotenv.config();//activa las variables del archivo .env
+let cnx;
+try {
+   cnx = mysql.createPool({
+  host: process.env.HOST,
+  user: process.env.DB_USER,
+  password:process.env.DB_PASSWORD,
+  database: process.env.DB_BASE,
+   port:process.env.DB_PORT,
+   waitForConnections: true,
+   connectionLimit: 10,
+   queueLimit: 0,
+});
+const conexion = await cnx.getConnection();
+console.log("Conexion a la base de datos exitosa");
+conexion.release(); //cierra la conexion de prueba
+}catch (error) {
+    console.log(`error en la conexion a la base de datos: ${error.message}`);
+}
+export const db=cnx;
