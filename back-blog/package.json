@@ -4,8 +4,7 @@
   "description": "REST API Node.js con arquitectura en capas y MySQL",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "start": "node src/server.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
