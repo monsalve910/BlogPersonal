@@ -1,6 +1,5 @@
 const { sequelize } = require('../config/database');
 const { DataTypes } = require('sequelize');
-import {db} from '../config/database.js';
 const UserModel = require('./user')(sequelize, DataTypes);
 const ArticleModel = require('./article')(sequelize, DataTypes);
 
