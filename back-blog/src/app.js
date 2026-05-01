@@ -4,12 +4,18 @@ const { sequelize } = require('./models');
 const userRoutes = require('./routes/user.routes');
 const articleRoutes = require('./routes/article.routes');
 const errorMiddleware = require('./middlewares/errorMiddleware');
-
+const cors = require('cors');
 dotenv.config();
 const app = express();
 
 app.use(express.json());
-
+app.use(
+    cors({
+        origin:"https://69f52710444135879d79423c--meek-faun-1b3107.netlify.app",
+        methods:["GET", "POST","PUT","DELETE"],
+        Credential:true,
+    }),
+);
 app.use('/api/usuarios', userRoutes);
 app.use('/api/articulos', articleRoutes);
 
