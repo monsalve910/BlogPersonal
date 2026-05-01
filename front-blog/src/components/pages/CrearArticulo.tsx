@@ -10,16 +10,22 @@ const CrearArticulo = () => {
   const [contenido, setContenido] = useState("");
   const [imagen, setImagen] = useState("");
   const [mensaje, setMensaje] = useState("");
-  const [tipoMensaje, setTipoMensaje] = useState<"success" | "error" | "">("");
   const [loading, setLoading] = useState(false);
 
-  // 🔥 AQUÍ VA TODO EL FETCH
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
     if (!isAuthenticated || !user) {
       setMensaje("Debes iniciar sesión");
-      setTipoMensaje("error");
+      return;
+    }
+
+    // 🔥 VALIDACIÓN IMPORTANTE
+    const userId = Number((user as any).id);
+
+    if (!userId || isNaN(userId)) {
+      console.error("USER INVALIDO:", user);
+      setMensaje("Error: usuario inválido");
       return;
     }
 
@@ -30,7 +36,7 @@ const CrearArticulo = () => {
       contenido,
       fecha: new Date().toISOString(),
       imagen: imagen || "default.png",
-      userId: Number(user._id),
+      userId,
     };
 
     try {
@@ -48,21 +54,17 @@ const CrearArticulo = () => {
       if (!res.ok) {
         console.error("Error backend:", data);
         setMensaje(data.message || "Error al crear artículo");
-        setTipoMensaje("error");
-        setLoading(false);
         return;
       }
 
       setMensaje("Artículo creado correctamente");
-      setTipoMensaje("success");
 
       setTitulo("");
       setContenido("");
       setImagen("");
-    } catch (error) {
-      console.error(error);
-      setMensaje("Error de conexión");
-      setTipoMensaje("error");
+    } catch (err) {
+      console.error(err);
+      setMensaje("Error de conexión con el servidor");
     }
 
     setLoading(false);
@@ -70,76 +72,52 @@ const CrearArticulo = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-[calc(100vh-8rem)] flex items-center justify-center px-4 bg-gray-50">
-        <div className="w-full max-w-md text-center">
-          <div className="bg-white shadow-xl rounded-2xl p-8">
-            <h2 className="text-xl font-bold mb-3">Sesión requerida</h2>
-            <p className="text-gray-500 mb-6">
-              Debes iniciar sesión para crear artículos
-            </p>
-            <button
-              onClick={() => navigate("/login")}
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg"
-            >
-              Ir al Login
-            </button>
-          </div>
-        </div>
+      <div className="p-10 text-center">
+        <p>Debes iniciar sesión</p>
+        <button onClick={() => navigate("/login")}>
+          Ir al login
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="px-4 py-8">
-      <div className="max-w-2xl mx-auto bg-white shadow-xl rounded-2xl p-8">
-        <h2 className="text-2xl font-bold mb-6">Nueva Publicación</h2>
+    <div className="p-6 max-w-xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Crear artículo</h1>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <input
-            value={titulo}
-            onChange={(e) => setTitulo(e.target.value)}
-            placeholder="Título"
-            className="w-full border p-3 rounded"
-            required
-          />
+      {mensaje && <p className="mb-3 text-red-500">{mensaje}</p>}
 
-          <textarea
-            value={contenido}
-            onChange={(e) => setContenido(e.target.value)}
-            placeholder="Contenido"
-            className="w-full border p-3 rounded"
-            rows={6}
-            required
-          />
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          type="text"
+          placeholder="Título"
+          value={titulo}
+          onChange={(e) => setTitulo(e.target.value)}
+          className="border p-2 w-full"
+        />
 
-          <input
-            value={imagen}
-            onChange={(e) => setImagen(e.target.value)}
-            placeholder="URL imagen"
-            className="w-full border p-3 rounded"
-          />
+        <textarea
+          placeholder="Contenido"
+          value={contenido}
+          onChange={(e) => setContenido(e.target.value)}
+          className="border p-2 w-full"
+        />
 
-          {mensaje && (
-            <p
-              className={
-                tipoMensaje === "success"
-                  ? "text-green-600"
-                  : "text-red-600"
-              }
-            >
-              {mensaje}
-            </p>
-          )}
+        <input
+          type="text"
+          placeholder="Imagen URL"
+          value={imagen}
+          onChange={(e) => setImagen(e.target.value)}
+          className="border p-2 w-full"
+        />
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-blue-600 text-white px-6 py-3 rounded w-full"
-          >
-            {loading ? "Publicando..." : "Publicar"}
-          </button>
-        </form>
-      </div>
+        <button
+          disabled={loading}
+          className="bg-blue-500 text-white px-4 py-2"
+        >
+          {loading ? "Publicando..." : "Publicar"}
+        </button>
+      </form>
     </div>
   );
 };
