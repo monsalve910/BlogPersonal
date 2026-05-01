@@ -3,16 +3,20 @@
   "version": "1.0.0",
   "description": "REST API Node.js con arquitectura en capas y MySQL",
   "main": "src/server.js",
+  "type": "commonjs",
   "scripts": {
     "start": "node src/server.js"
   },
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "dependencies": {
-    "bcrypt": "^5.0.1",
-    "express": "^4.18.2",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.4",
-    "sequelize": "^6.26.0",
-    "mysql2": "^2.3.3",
-    "joi": "^17.7.1"
+    "express": "^4.18.2",
+    "joi": "^17.7.1",
+    "mysql2": "^3.22.3",
+    "sequelize": "^6.26.0"
   },
   "author": "OpenCode",
   "license": "MIT"

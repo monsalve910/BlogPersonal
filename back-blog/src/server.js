@@ -4,14 +4,20 @@ const PORT = process.env.PORT || 3000;
 
 async function start() {
   try {
-     await sequelize.sync();
     await sequelize.authenticate();
-    await sequelize.sync({ alter: true });
-    app.listen(PORT, () => {
-      console.log('Server running on port', PORT);
-    });
+    console.log('Conexión a la base de datos exitosa');
+    
+    await sequelize.sync({ alter: false });
+    console.log('Modelos sincronizados');
+    
   } catch (err) {
-    console.error('DB connection error:', err);
+    console.error('Error de base de datos:', err.message);
+    console.log('El servidor iniciará sin conexión a la base de datos');
   }
+
+  app.listen(PORT, () => {
+    console.log('Servidor corriendo en el puerto', PORT);
+  });
 }
+
 start();
