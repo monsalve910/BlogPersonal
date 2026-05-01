@@ -1,7 +1,13 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
 
 interface User {
-  _id: number;
+  _id: string;
   name: string;
   email: string;
 }
@@ -16,48 +22,66 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+const API_URL = "https://blogpersonal-etde.onrender.com/api/usuarios";
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("blog_user");
-    if (stored) {
-      setUser(JSON.parse(stored));
-    }
+    if (stored) setUser(JSON.parse(stored));
   }, []);
 
   async function login(email: string, password: string): Promise<boolean> {
     try {
-      const res = await fetch("https://blogpersonal-etde.onrender.com/api/usuarios/login", {
+      const res = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+
       const data = await res.json();
+
+      if (!res.ok) return false;
+
       if (data.status === "success") {
         setUser(data.usuario);
         localStorage.setItem("blog_user", JSON.stringify(data.usuario));
         return true;
       }
+
       return false;
-    } catch {
+    } catch (err) {
+      console.error(err);
       return false;
     }
   }
 
-  async function register(name: string, email: string, password: string): Promise<boolean> {
+  async function register(
+    name: string,
+    email: string,
+    password: string
+  ): Promise<boolean> {
     try {
-      const res = await fetch("https://blogpersonal-etde.onrender.com/api/usuarios", {
+      const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
       });
+
       const data = await res.json();
+
+      if (!res.ok) return false;
+
       if (data.status === "success") {
+        setUser(data.usuario);
+        localStorage.setItem("blog_user", JSON.stringify(data.usuario));
         return true;
       }
+
       return false;
-    } catch {
+    } catch (err) {
+      console.error(err);
       return false;
     }
   }
@@ -68,7 +92,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        register,
+        logout,
+        isAuthenticated: !!user,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
