@@ -1,36 +1,70 @@
-const { Article, User } = require('../models');
+const { Article, User } = require("../models");
 
+// CREAR ARTÍCULO
 async function createArticle(data) {
   const article = await Article.create({
     titulo: data.titulo,
     contenido: data.contenido,
     fecha: data.fecha,
     imagen: data.imagen,
-    userId: data.userId
+    userId: data.userId,
   });
+
   return article;
 }
 
+// OBTENER TODOS
 async function getArticles() {
-  return await Article.findAll({ include: [{ model: User, as: 'User' }] });
+  return await Article.findAll({
+    include: [
+      {
+        model: User,
+        as: "User",
+        attributes: ["id", "name", "email"],
+      },
+    ],
+  });
 }
 
+// POR ID
 async function getArticleById(id) {
-  return await Article.findByPk(id, { include: [{ model: User, as: 'User' }] });
+  return await Article.findByPk(id, {
+    include: [
+      {
+        model: User,
+        as: "User",
+        attributes: ["id", "name", "email"],
+      },
+    ],
+  });
 }
 
+// UPDATE
 async function updateArticle(id, data) {
-  const a = await Article.findByPk(id);
-  if (!a) return null;
-  await a.update(data);
-  return a;
+  const article = await Article.findByPk(id);
+
+  if (!article) return null;
+
+  await article.update(data);
+
+  return article;
 }
 
+// DELETE
 async function deleteArticle(id) {
-  const a = await Article.findByPk(id);
-  if (!a) return null;
-  await a.destroy();
+  const article = await Article.findByPk(id);
+
+  if (!article) return null;
+
+  await article.destroy();
+
   return true;
 }
 
-module.exports = { createArticle, getArticles, getArticleById, updateArticle, deleteArticle };
+module.exports = {
+  createArticle,
+  getArticles,
+  getArticleById,
+  updateArticle,
+  deleteArticle,
+};
