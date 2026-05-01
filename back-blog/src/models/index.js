@@ -1,8 +1,8 @@
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize(process.env.DATABASE_URL);
 
-const UserModel = require("./User");
-const ArticleModel = require("./Article");
+const UserModel = require("./user");
+const ArticleModel = require("./article");
 
 const User = UserModel(sequelize, Sequelize.DataTypes);
 const Article = ArticleModel(sequelize, Sequelize.DataTypes);
