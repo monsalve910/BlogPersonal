@@ -1,19 +1,17 @@
 const { Article, User } = require("../models");
 
-// CREAR ARTÍCULO
+// CREATE
 async function createArticle(data) {
-  const article = await Article.create({
+  return await Article.create({
     titulo: data.titulo,
     contenido: data.contenido,
-    fecha: data.fecha,
-    imagen: data.imagen,
-    userId: data.userId,
+    fecha: data.fecha || new Date(),
+    imagen: data.imagen || "default.png",
+    userId: Number(data.userId),
   });
-
-  return article;
 }
 
-// OBTENER TODOS
+// GET ALL
 async function getArticles() {
   return await Article.findAll({
     include: [
@@ -26,7 +24,7 @@ async function getArticles() {
   });
 }
 
-// POR ID
+// GET BY ID
 async function getArticleById(id) {
   return await Article.findByPk(id, {
     include: [
@@ -42,22 +40,18 @@ async function getArticleById(id) {
 // UPDATE
 async function updateArticle(id, data) {
   const article = await Article.findByPk(id);
-
   if (!article) return null;
 
   await article.update(data);
-
   return article;
 }
 
 // DELETE
 async function deleteArticle(id) {
   const article = await Article.findByPk(id);
-
   if (!article) return null;
 
   await article.destroy();
-
   return true;
 }
 

@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 0,
       },
 
-      // 🔴 IMPORTANTE: esto faltaba en tu caso
+      //  CLAVE PARA EVITAR ERRORES
       userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -52,9 +52,7 @@ module.exports = (sequelize, DataTypes) => {
       __v: v.version,
     };
 
-    if (v.User) {
-      result.User = v.User;
-    }
+    if (v.User) result.User = v.User;
 
     return result;
   };

@@ -7,15 +7,14 @@ const ArticleModel = require("./article");
 const User = UserModel(sequelize, Sequelize.DataTypes);
 const Article = ArticleModel(sequelize, Sequelize.DataTypes);
 
-// 🔥 RELACIONES CORRECTAS
-User.hasMany(Article, {
-  foreignKey: "userId",
-  as: "articles",
-});
-
+//  RELACIONES CORRECTAS
 Article.belongsTo(User, {
   foreignKey: "userId",
   as: "User",
+});
+
+User.hasMany(Article, {
+  foreignKey: "userId",
 });
 
 module.exports = {
